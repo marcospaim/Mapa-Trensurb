@@ -37,7 +37,6 @@ function atualizaMapa(data)
     layerGroup.clearLayers();
 
     for (x in data){
-        console.log(data[x].Latitude)
         lat = radians_to_degrees(data[x].Latitude)
         lon = radians_to_degrees(data[x].Longitude)
         if (data[x].Orientacao > 120 && data[x].Orientacao < 300){ //sentido sul/mercado
