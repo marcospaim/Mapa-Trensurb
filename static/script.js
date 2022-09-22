@@ -7,12 +7,6 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 var layerGroup = L.layerGroup().addTo(map);
 
-var circle = L.circle([-30, -51.19], {
-    color: 'red',
-    fillColor: '#f03',
-    fillOpacity: 1,
-    radius: 40
-}).addTo(layerGroup);
 
 function radians_to_degrees(radians)
 {
@@ -46,7 +40,7 @@ function atualizaMapa(data)
         console.log(data[x].Latitude)
         lat = radians_to_degrees(data[x].Latitude)
         lon = radians_to_degrees(data[x].Longitude)
-        if (data[x].Orientacao > 120){ //sentido sul/mercado
+        if (data[x].Orientacao > 120 && data[x].Orientacao < 300){ //sentido sul/mercado
             xcolor = 'blue'
         }
         else {
@@ -57,7 +51,7 @@ function atualizaMapa(data)
             fillColor: xcolor,
             fillOpacity: 1,
             radius: 8
-        }).bindPopup(`<b>${data[x].Elemento}</b><br>Velocidade: ${data[x].Velocidade}<br>Orientação: ${data[x].Orientacao}<br>Data e hora: ${data[x]['Data e Hora']}`)
+        }).bindPopup(`<b>${data[x].Elemento}</b><br>Velocidade: ${data[x].Velocidade} km/h<br>Orientação: ${data[x].Orientacao}º<br>Data e hora: ${data[x]['Data e Hora']}`)
         .on('mouseover', function (e) {
             this.openPopup();
         })
