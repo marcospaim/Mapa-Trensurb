@@ -40,16 +40,15 @@ function atualizaMapa(data)
         lat = radians_to_degrees(data[x].Latitude)
         lon = radians_to_degrees(data[x].Longitude)
         if (data[x].Orientacao > 120 && data[x].Orientacao < 300){ //sentido sul/mercado
-            xcolor = 'blue'
+            xcolor = 'darkblue'
         }
         else {
-            xcolor = 'red'
+            xcolor = 'darkred'
         }
-        var circle = L.circleMarker([lat, lon], {
-            color: xcolor,
-            fillColor: xcolor,
-            fillOpacity: 1,
-            radius: 8
+        var redMarker = L.AwesomeMarkers.icon({icon: 'train', prefix: 'fa', markerColor: xcolor})
+
+        var trainMarker = L.marker([lat, lon], {
+            icon: redMarker
         }).bindPopup(`<b>${data[x].Elemento}</b><br>Velocidade: ${data[x].Velocidade} km/h<br>Orientação: ${data[x].Orientacao}º<br>Data e hora: ${data[x]['Data e Hora']}`)
         .on('mouseover', function (e) {
             this.openPopup();
