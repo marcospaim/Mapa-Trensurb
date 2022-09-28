@@ -1,3 +1,12 @@
 #map { 
     height: 100vh; 
 }
+
+.leaflet-tooltip-pane .text {
+    color: black; 
+    font-weight: bold;
+    background: transparent;
+    border:0;
+    box-shadow: none;
+    font-size:1.2em;
+  }
