@@ -3,14 +3,17 @@ import requests
 from requests.auth import HTTPBasicAuth
 from datetime import datetime, timedelta
 import sys
-from config import get_estacoes, get_path
+from config import get_estacoes, get_path, get_config
 from shapely.geometry import Polygon, Point
 from sentido import add_sentido
+from configData import config_data
 
 app = Flask(__name__)
 
 gps_dict = {}
 last_request = datetime.now()
+
+USER, PASSWORD, PORTA, IP_HOST = get_config()
 
 @app.route("/")
 def hello_world():
@@ -36,16 +39,17 @@ def gps():
                     
     now = datetime.now()
     response = None
-    if(now-last_request > timedelta(seconds=20)):
-        try:
-            response = requests.get("http://10.0.0.43:5244/coordenadas/api/v1.0/GPS",auth=HTTPBasicAuth(sys.argv[1], sys.argv[2]))
-            response = response.json()
-            response["Coordenadas"][:] = [d for d in response["Coordenadas"] if not polygon.contains(Point(float(d.get("Latitude")), float(d.get("Longitude"))))] # filtra trens no estacionamento
-            response = add_sentido(response)
-            gps_dict = response
-            last_request = datetime.now()
-        except:
-            print("Nao foi possivel conectar-se com a api")
+    if(now-last_request > timedelta(seconds=10)):
+        #try:
+        response = requests.get("http://10.0.0.43:5244/coordenadas/api/v1.0/GPS",auth=HTTPBasicAuth(USER, PASSWORD))
+        response = response.json()
+        response["Coordenadas"][:] = [d for d in response["Coordenadas"] if not polygon.contains(Point(float(d.get("Latitude")), float(d.get("Longitude"))))] # filtra trens no estacionamento
+        response = add_sentido(response)
+        config_data(response)
+        gps_dict = response
+        last_request = datetime.now()
+        #except:
+            #print("Nao foi possivel conectar-se com a api")
     
     return gps_dict, 200
 
